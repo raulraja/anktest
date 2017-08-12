@@ -1,0 +1,58 @@
+group 'anktest'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '1.1.4-dev-600'
+
+    repositories {
+        mavenCentral()
+        maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin'
+
+apply from: 'generated-kotlin-sources.gradle'
+apply plugin: 'kotlin-kapt'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url 'https://jitpack.io' }
+    maven { url "https://dl.bintray.com/jetbrains/markdown/" }
+    maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
+    maven { url 'https://kotlin.bintray.com/kotlinx' }
+    maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
+    maven { url "http://dl.bintray.com/kategory/maven" }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile "org.jetbrains:markdown:0.1.25"
+    compile "com.github.kategory:kategory:-SNAPSHOT"
+    compile "io.kategory:kategory-annotations:0.3.5"
+    compile "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlin_version"
+    kapt "io.kategory:kategory-annotations-compile:0.3.5"
+    compileOnly "io.kategory:kategory-annotations-compile:0.3.5"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+task ank(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = "ank.MainKt"
+    args "/home/raulraja/Documents/workspace/anktest/src/main/docs",
+            "/home/raulraja/Documents/workspace/anktest/build/site",
+            "-classpath", "${sourceSets.main.runtimeClasspath.join(":")}"
+}
